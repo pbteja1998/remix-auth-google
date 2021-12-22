@@ -19,7 +19,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
   typecheck:
     name: Typechecker
@@ -37,25 +37,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Typecheck
-        run: npm run typecheck
-
-  test:
-    name: Unit and Integration Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Use Node 14
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Test
-        run: npm run test -- --ci --coverage --maxWorkers=2
+        run: yarn typecheck
 
   lint:
     name: Linter
@@ -73,7 +55,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Lint
-        run: npm run lint
+        run: yarn lint

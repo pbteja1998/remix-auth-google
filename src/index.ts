@@ -1,11 +1,11 @@
-import { StrategyVerifyCallback } from 'remix-auth'
-import {
+import type { StrategyVerifyCallback } from 'remix-auth'
+import type {
   OAuth2Profile,
-  OAuth2Strategy,
   OAuth2StrategyVerifyParams,
 } from 'remix-auth-oauth2'
+import { OAuth2Strategy } from 'remix-auth-oauth2'
 
-export interface GoogleStrategyOptions {
+export type GoogleStrategyOptions = {
   clientID: string
   clientSecret: string
   callbackURL: string
@@ -18,7 +18,7 @@ export interface GoogleStrategyOptions {
   prompt?: 'none' | 'consent' | 'select_account'
 }
 
-export interface GoogleProfile extends OAuth2Profile {
+export type GoogleProfile = {
   id: string
   displayName: string
   name: {
@@ -38,27 +38,31 @@ export interface GoogleProfile extends OAuth2Profile {
     email_verified: boolean
     hd: string
   }
-}
+} & OAuth2Profile
 
-export interface GoogleExtraParams extends Record<string, string | number> {
+export type GoogleExtraParams = {
   expires_in: 3920
   token_type: 'Bearer'
   scope: string
   id_token: string
-}
+} & Record<string, string | number>
 
 export class GoogleStrategy<User> extends OAuth2Strategy<
   User,
   GoogleProfile,
   GoogleExtraParams
 > {
-  name = 'google'
+  public name = 'google'
 
-  private scope: string
-  private accessType: string
-  private prompt?: 'none' | 'consent' | 'select_account'
-  private includeGrantedScopes: boolean
-  private userInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+  private readonly scope: string
+
+  private readonly accessType: string
+
+  private readonly prompt?: 'none' | 'consent' | 'select_account'
+
+  private readonly includeGrantedScopes: boolean
+
+  private readonly userInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo'
 
   constructor(
     {
@@ -91,24 +95,26 @@ export class GoogleStrategy<User> extends OAuth2Strategy<
     this.prompt = prompt
   }
 
-  protected authorizationParams() {
-    let params = new URLSearchParams({
+  protected authorizationParams(): URLSearchParams {
+    const params = new URLSearchParams({
       scope: this.scope,
       access_type: this.accessType,
       include_granted_scopes: String(this.includeGrantedScopes),
     })
-    if (this.prompt) params.set('prompt', this.prompt)
+    if (this.prompt) {
+      params.set('prompt', this.prompt)
+    }
     return params
   }
 
   protected async userProfile(accessToken: string): Promise<GoogleProfile> {
-    let response = await fetch(this.userInfoURL, {
+    const response = await fetch(this.userInfoURL, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-    let raw: GoogleProfile['_json'] = await response.json()
-    let profile: GoogleProfile = {
+    const raw: GoogleProfile['_json'] = await response.json()
+    const profile: GoogleProfile = {
       provider: 'google',
       id: raw.sub,
       displayName: raw.name,
