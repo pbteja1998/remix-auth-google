@@ -3057,6 +3057,14 @@ remix-auth@^3.1.0:
     remix-utils "^2.2.0"
     uuid "^8.3.2"
 
+remix-auth@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/remix-auth/-/remix-auth-3.2.1.tgz#6252246eef1016de2c9f426b1fd8c5a2689dfb09"
+  integrity sha512-5N5ZjKCYGjbRmMi9PQwngKuuGkBEfny0Q4iXyTrDxQhSzAbQ/+wHX+ZKGdneYWHULZJCRZbjSmyrjk/rJxGFlw==
+  dependencies:
+    remix-utils "^2.2.0"
+    uuid "^8.3.2"
+
 remix-utils@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/remix-utils/-/remix-utils-2.2.0.tgz#36b7d6b7611824d2072ae36aa5d5774c89ff9a6e"
