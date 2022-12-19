@@ -16,5 +16,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-throw-literal': 'off',
     'sonarjs/no-duplicate-string': 'off',
+    'sonarjs/elseif-without-else': 'off',
   },
 }
