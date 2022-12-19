@@ -5,6 +5,11 @@ import type {
 } from 'remix-auth-oauth2'
 import { OAuth2Strategy } from 'remix-auth-oauth2'
 
+/**
+ * @see https://developers.google.com/identity/protocols/oauth2/scopes#oauth2
+ */
+export type GoogleScope = 'openid' | 'email' | 'profile'
+
 export type GoogleStrategyOptions = {
   clientID: string
   clientSecret: string
@@ -12,10 +17,12 @@ export type GoogleStrategyOptions = {
   /**
    * @default "openid profile email"
    */
-  scope?: string
+  scope?: GoogleScope[] | string
   accessType?: 'online' | 'offline'
   includeGrantedScopes?: boolean
   prompt?: 'none' | 'consent' | 'select_account'
+  hd?: string
+  loginHint?: string
 }
 
 export type GoogleProfile = {
@@ -47,20 +54,32 @@ export type GoogleExtraParams = {
   id_token: string
 } & Record<string, string | number>
 
+export const GoogleStrategyDefaultScopes: GoogleScope[] = [
+  'openid',
+  'profile',
+  'email',
+]
+export const GoogleStrategyDefaultName = 'google'
+export const GoogleStrategyScopeSeperator = ' '
+
 export class GoogleStrategy<User> extends OAuth2Strategy<
   User,
   GoogleProfile,
   GoogleExtraParams
 > {
-  public name = 'google'
+  public name = GoogleStrategyDefaultName
 
-  private readonly scope: string
+  private readonly scope: GoogleScope[]
 
   private readonly accessType: string
 
   private readonly prompt?: 'none' | 'consent' | 'select_account'
 
   private readonly includeGrantedScopes: boolean
+
+  private readonly hd?: string
+
+  private readonly loginHint?: string
 
   private readonly userInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo'
 
@@ -73,6 +92,8 @@ export class GoogleStrategy<User> extends OAuth2Strategy<
       accessType,
       includeGrantedScopes,
       prompt,
+      hd,
+      loginHint,
     }: GoogleStrategyOptions,
     verify: StrategyVerifyCallback<
       User,
@@ -89,20 +110,28 @@ export class GoogleStrategy<User> extends OAuth2Strategy<
       },
       verify
     )
-    this.scope = scope ?? 'openid profile email'
+    this.scope = this.getScope(scope)
     this.accessType = accessType ?? 'online'
     this.includeGrantedScopes = includeGrantedScopes ?? false
     this.prompt = prompt
+    this.hd = hd
+    this.loginHint = loginHint
   }
 
   protected authorizationParams(): URLSearchParams {
     const params = new URLSearchParams({
-      scope: this.scope,
+      scope: this.scope.join(GoogleStrategyScopeSeperator),
       access_type: this.accessType,
       include_granted_scopes: String(this.includeGrantedScopes),
     })
     if (this.prompt) {
       params.set('prompt', this.prompt)
+    }
+    if (this.hd) {
+      params.set('hd', this.hd)
+    }
+    if (this.loginHint) {
+      params.set('login_hint', this.loginHint)
     }
     return params
   }
@@ -127,5 +156,16 @@ export class GoogleStrategy<User> extends OAuth2Strategy<
       _json: raw,
     }
     return profile
+  }
+
+  // Allow users the option to pass a scope string, or typed array
+  private getScope(scope: GoogleStrategyOptions['scope']) {
+    if (!scope) {
+      return GoogleStrategyDefaultScopes
+    } else if (typeof scope === 'string') {
+      return scope.split(GoogleStrategyScopeSeperator) as GoogleScope[]
+    }
+
+    return scope
   }
 }
