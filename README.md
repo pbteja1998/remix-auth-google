@@ -22,6 +22,7 @@ Follow the steps on [the Google documentation](https://developers.google.com/ide
 ### Create the strategy instance
 
 ```ts
+// app/services/auth.server.ts
 import { GoogleStrategy } from "remix-auth-google";
 
 let googleStrategy = new GoogleStrategy(
@@ -54,8 +55,8 @@ export default function Login() {
 
 ```tsx
 // app/routes/auth/google.tsx
-import { ActionArgs } from 'remix'
-import { authenticator } from '~/auth.server'
+import { ActionArgs } from '@remix-run/node'
+import { authenticator } from '~/services/auth.server'
 
 export let loader = () => redirect('/login')
 
@@ -66,8 +67,8 @@ export let action = ({ request }: ActionArgs) => {
 
 ```tsx
 // app/routes/auth/google/callback.tsx
-import { LoaderArgs } from 'remix'
-import { authenticator } from '~/auth.server'
+import { LoaderArgs } from '@remix-run/node'
+import { authenticator } from '~/services/auth.server'
 
 export let loader = ({ request }: LoaderArgs) => {
   return authenticator.authenticate('google', request, {
