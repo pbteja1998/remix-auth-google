@@ -28,7 +28,7 @@ let googleStrategy = new GoogleStrategy(
   {
     clientID: "YOUR_CLIENT_ID",
     clientSecret: "YOUR_CLIENT_SECRET",
-    callbackURL: "https://example.com/auth/google/callback";
+    callbackURL: "https://example.com/auth/google/callback",
   },
   async ({accessToken, refreshToken, extraParams, profile}) => {
     // Get the user data from your DB or API using the tokens and profile
