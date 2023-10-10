@@ -34,13 +34,13 @@
     "README.md"
   ],
   "peerDependencies": {
-    "@remix-run/server-runtime": "^1.1.1",
+    "@remix-run/server-runtime": "^2.0.1",
     "remix-auth": "^3.2.1"
   },
   "devDependencies": {
-    "@remix-run/node": "^1.1.1",
-    "@remix-run/react": "^1.1.1",
-    "@remix-run/server-runtime": "^1.1.1",
+    "@remix-run/node": "^2.0.1",
+    "@remix-run/react": "^2.0.1",
+    "@remix-run/server-runtime": "^2.0.1",
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
@@ -50,13 +50,13 @@
     "husky": ">=6",
     "lint-staged": ">=12.1.4",
     "prettier": "^2.5.1",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "remix-auth": "^3.2.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "remix-auth-oauth2": "^1.1.0"
+    "remix-auth-oauth2": "^1.11.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "yarn lint",
