@@ -54,23 +54,23 @@ export default function Login() {
 ```
 
 ```tsx
-// app/routes/auth/google.tsx
-import { ActionArgs } from '@remix-run/node'
+// app/routes/auth.google.tsx
+import { redirect, type ActionFunctionArgs } from '@remix-run/node'
 import { authenticator } from '~/services/auth.server'
 
 export let loader = () => redirect('/login')
 
-export let action = ({ request }: ActionArgs) => {
+export let action = ({ request }: ActionFunctionArgs) => {
   return authenticator.authenticate('google', request)
 }
 ```
 
 ```tsx
-// app/routes/auth/google/callback.tsx
-import { LoaderArgs } from '@remix-run/node'
+// app/routes/auth.google.callback.tsx
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { authenticator } from '~/services/auth.server'
 
-export let loader = ({ request }: LoaderArgs) => {
+export let loader = ({ request }: LoaderFunctionArgs) => {
   return authenticator.authenticate('google', request, {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
