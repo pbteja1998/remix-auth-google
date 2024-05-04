@@ -57,12 +57,12 @@ export default function Login() {
 
 ```tsx
 // app/routes/auth/google.tsx
-import { ActionArgs } from '@remix-run/node'
+import { ActionFunctionArgs, redirect } from '@remix-run/node'
 import { authenticator } from '~/services/auth.server'
 
 export const loader = () => redirect('/login')
 
-export const action = ({ request }: ActionArgs) => {
+export const action = ({ request }: ActionFunctionArgs) => {
   return authenticator.authenticate('google', request)
 }
 ```
