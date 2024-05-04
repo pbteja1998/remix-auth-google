@@ -25,7 +25,7 @@ Follow the steps on [the Google documentation](https://developers.google.com/ide
 // app/services/auth.server.ts
 import { GoogleStrategy } from 'remix-auth-google'
 
-let googleStrategy = new GoogleStrategy(
+const googleStrategy = new GoogleStrategy(
   {
     clientID: 'YOUR_CLIENT_ID',
     clientSecret: 'YOUR_CLIENT_SECRET',
@@ -44,6 +44,8 @@ authenticator.use(googleStrategy)
 
 ```tsx
 // app/routes/login.tsx
+import { Form } from "@remix-run/react";
+
 export default function Login() {
   return (
     <Form action="/auth/google" method="post">
@@ -55,22 +57,22 @@ export default function Login() {
 
 ```tsx
 // app/routes/auth/google.tsx
-import { ActionArgs } from '@remix-run/node'
+import { ActionFunctionArgs, redirect } from '@remix-run/node'
 import { authenticator } from '~/services/auth.server'
 
-export let loader = () => redirect('/login')
+export const loader = () => redirect('/login')
 
-export let action = ({ request }: ActionArgs) => {
+export const action = ({ request }: ActionFunctionArgs) => {
   return authenticator.authenticate('google', request)
 }
 ```
 
 ```tsx
 // app/routes/auth/google/callback.tsx
-import { LoaderArgs } from '@remix-run/node'
+import { LoaderFunctionArgs } from '@remix-run/node'
 import { authenticator } from '~/services/auth.server'
 
-export let loader = ({ request }: LoaderArgs) => {
+export const loader = ({ request }: LoaderFunctionArgs) => {
   return authenticator.authenticate('google', request, {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
